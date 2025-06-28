@@ -60,32 +60,22 @@ export class PortfolioStorage {
     }
   }
 
-  // 从localStorage或服务器加载数据
+  // 从服务器加载数据，localStorage仅作为备份
   async load(): Promise<PortfolioData> {
     try {
-      // 客户端优先从localStorage加载
-      if (!this.isServer) {
-        const stored = localStorage.getItem(this.storageKey)
-        if (stored) {
-          const storageData: StorageData = JSON.parse(stored)
-          if (storageData.version === STORAGE_VERSION) {
-            return storageData.data
-          }
-        }
-      }
-
-      // 从服务器加载数据
+      // 优先从服务器加载数据
       const response = await fetch('/api/portfolio', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
+        cache: 'no-cache' // 禁用缓存，确保获取最新数据
       })
 
       if (response.ok) {
         const serverData = await response.json()
         
-        // 客户端同时保存到localStorage
+        // 客户端同时保存到localStorage作为备份
         if (!this.isServer) {
           const storageData: StorageData = {
             version: STORAGE_VERSION,
@@ -98,9 +88,38 @@ export class PortfolioStorage {
         return serverData
       }
 
+      // 如果服务器加载失败，尝试从localStorage加载（仅客户端）
+      if (!this.isServer) {
+        const stored = localStorage.getItem(this.storageKey)
+        if (stored) {
+          const storageData: StorageData = JSON.parse(stored)
+          if (storageData.version === STORAGE_VERSION) {
+            console.warn("服务器数据加载失败，使用本地备份数据")
+            return storageData.data
+          }
+        }
+      }
+
       return defaultPortfolioData
     } catch (error) {
       console.error("加载数据失败:", error)
+      
+      // 如果服务器请求失败，尝试从localStorage加载（仅客户端）
+      if (!this.isServer) {
+        try {
+          const stored = localStorage.getItem(this.storageKey)
+          if (stored) {
+            const storageData: StorageData = JSON.parse(stored)
+            if (storageData.version === STORAGE_VERSION) {
+              console.warn("服务器数据加载失败，使用本地备份数据")
+              return storageData.data
+            }
+          }
+        } catch (localError) {
+          console.error("本地数据加载也失败:", localError)
+        }
+      }
+      
       return defaultPortfolioData
     }
   }
@@ -126,12 +145,9 @@ export class PortfolioStorage {
   // 检查是否有保存的数据
   async hasData(): Promise<boolean> {
     try {
-      if (!this.isServer) {
-        return localStorage.getItem(this.storageKey) !== null
-      }
-
       const response = await fetch('/api/portfolio', {
         method: 'GET',
+        cache: 'no-cache'
       })
 
       return response.ok
@@ -143,16 +159,9 @@ export class PortfolioStorage {
   // 获取最后更新时间
   async getLastUpdated(): Promise<string | null> {
     try {
-      if (!this.isServer) {
-        const stored = localStorage.getItem(this.storageKey)
-        if (!stored) return null
-
-        const storageData: StorageData = JSON.parse(stored)
-        return storageData.lastUpdated
-      }
-
       const response = await fetch('/api/portfolio/last-updated', {
         method: 'GET',
+        cache: 'no-cache'
       })
 
       if (response.ok) {
