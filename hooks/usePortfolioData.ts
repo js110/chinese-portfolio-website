@@ -14,11 +14,12 @@ export function usePortfolioData() {
 
   // 初始化加载数据
   useEffect(() => {
-    const loadData = () => {
+    const loadData = async () => {
       try {
-        const savedData = portfolioStorage.load()
+        const savedData = await portfolioStorage.load()
         setData(savedData)
-        setLastSaved(portfolioStorage.getLastUpdated() ? new Date(portfolioStorage.getLastUpdated()!) : null)
+        const lastUpdated = await portfolioStorage.getLastUpdated()
+        setLastSaved(lastUpdated ? new Date(lastUpdated) : null)
       } catch (error) {
         console.error("加载数据失败:", error)
         setData(defaultPortfolioData)
@@ -39,7 +40,7 @@ export function usePortfolioData() {
   const saveData = useCallback(async (newData: PortfolioData) => {
     setSaving(true)
     try {
-      const success = portfolioStorage.save(newData)
+      const success = await portfolioStorage.save(newData)
       if (success) {
         setData(newData)
         setLastSaved(new Date())
@@ -152,7 +153,7 @@ export function usePortfolioData() {
   // 清除所有数据
   const clearData = useCallback(async () => {
     try {
-      const success = portfolioStorage.clear()
+      const success = await portfolioStorage.clear()
       if (success) {
         setData(defaultPortfolioData)
         setLastSaved(null)
@@ -166,16 +167,16 @@ export function usePortfolioData() {
   }, [])
 
   // 导出数据
-  const exportData = useCallback(() => {
-    return portfolioStorage.export()
+  const exportData = useCallback(async () => {
+    return await portfolioStorage.export()
   }, [])
 
   // 导入数据
   const importData = useCallback(async (jsonData: string) => {
     try {
-      const success = portfolioStorage.import(jsonData)
+      const success = await portfolioStorage.import(jsonData)
       if (success) {
-        const importedData = portfolioStorage.load()
+        const importedData = await portfolioStorage.load()
         setData(importedData)
         setLastSaved(new Date())
         return true
@@ -210,6 +211,6 @@ export function usePortfolioData() {
     resetToDefault,
     clearData,
     exportData,
-    importData
+    importData,
   }
 } 

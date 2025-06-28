@@ -14,11 +14,13 @@ import { usePortfolioData } from "@/hooks/usePortfolioData"
 import { EditModeProvider } from "@/contexts/EditModeContext"
 import { LoginDialog } from "@/components/LoginDialog"
 import { Navbar } from "@/components/Navbar"
+import { useRouter } from "next/navigation"
 
 function HomePageContent() {
   const { data, loading } = usePortfolioData()
   const [showPersonalInfoEditor, setShowPersonalInfoEditor] = useState(false)
   const { isEditMode } = useEditMode()
+  const router = useRouter()
 
   if (loading) {
     return (
@@ -29,6 +31,10 @@ function HomePageContent() {
   }
 
   const { personalInfo, projects, resume } = data
+
+  const handleProjectClick = () => {
+    router.push('/projects')
+  }
 
   return (
     <div
@@ -107,8 +113,9 @@ function HomePageContent() {
                             : `bg-gradient-to-br ${project.gradient}`
                         }`}
                         style={project.image ? { backgroundImage: `url(${project.image})` } : {}}
+                        onClick={handleProjectClick}
                       />
-                      <div>
+                      <div onClick={handleProjectClick}>
                         <p className="text-[#121416] text-base font-medium leading-normal">{project.title}</p>
                         <p className="text-[#6a7681] text-sm font-normal leading-normal">
                           {project.description}

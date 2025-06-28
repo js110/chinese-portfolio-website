@@ -109,11 +109,11 @@ export function ImageUpload({
         whileTap={{ scale: 0.98 }}
       >
         {preview ? (
-          <div className="relative w-full h-full">
+          <div className="relative w-full h-full bg-white">
             <img
               src={preview}
               alt="预览"
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-full object-contain rounded-lg"
             />
             <Button
               type="button"

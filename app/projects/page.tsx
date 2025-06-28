@@ -15,7 +15,7 @@ import { Navbar } from "@/components/Navbar"
 import { List, Plus, Edit, Trash2 } from "lucide-react"
 
 function ProjectsPageContent() {
-  const { data, loading } = usePortfolioData()
+  const { data, loading, deleteProject } = usePortfolioData()
   const [showProjectEditor, setShowProjectEditor] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const { isEditMode } = useEditMode()
@@ -43,7 +43,7 @@ function ProjectsPageContent() {
 
   const handleCloseEditor = () => {
     setShowProjectEditor(false)
-    setEditingProject(undefined)
+    setEditingProject(null)
   }
 
   return (
@@ -152,7 +152,7 @@ function ProjectsPageContent() {
       {/* 项目编辑器 */}
       {showProjectEditor && (
         <ProjectEditor
-          project={editingProject}
+          project={editingProject || undefined}
           onClose={handleCloseEditor}
           isEditing={!!editingProject}
         />
