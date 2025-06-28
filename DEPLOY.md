@@ -1,26 +1,5 @@
 # 🚀 快速部署指南
 
-## 方法一：一键部署（推荐）
-
-### 1. 连接到服务器
-```bash
-ssh root@your-server-ip
-```
-
-### 2. 创建普通用户（安全考虑）
-```bash
-adduser portfolio
-usermod -aG sudo portfolio
-su - portfolio
-```
-
-### 3. 下载并运行部署脚本
-```bash
-wget https://raw.githubusercontent.com/js110/chinese-portfolio-website/main/deploy.sh
-chmod +x deploy.sh
-./deploy.sh
-```
-
 ## 方法二：手动部署
 
 ### 1. 安装依赖
