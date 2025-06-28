@@ -37,15 +37,15 @@ function ResumePageContent() {
     >
       <Navbar />
       <div className="layout-container flex h-full grow flex-col">
-        <div className="flex justify-end px-10 pt-6">
+        <div className="flex justify-end px-4 sm:px-6 lg:px-10 pt-6">
           {isEditMode && isLoggedIn && (
-            <Button onClick={() => setShowEditor(true)}>编辑</Button>
+            <Button onClick={() => setShowEditor(true)} className="text-sm sm:text-base">编辑</Button>
           )}
         </div>
         {showEditor && (
           <ResumeEditor resume={resume} onClose={() => setShowEditor(false)} />
         )}
-        <div className="px-40 flex flex-1 justify-center py-5">
+        <div className="px-4 sm:px-6 lg:px-40 flex flex-1 justify-center py-5">
           <div id="resume-content" className="layout-content-container flex flex-col max-w-[960px] flex-1">
             <ResumeOverview overview={resume.overview} />
             <ResumeWorkExperience workExperience={resume.workExperience} />

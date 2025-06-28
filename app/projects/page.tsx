@@ -54,18 +54,18 @@ function ProjectsPageContent() {
       <Navbar />
 
       <div className="layout-container flex h-full grow flex-col">
-        <div className="px-40 flex flex-1 justify-center py-5">
+        <div className="px-4 sm:px-6 lg:px-40 flex flex-1 justify-center py-5">
           <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
             <FadeIn delay={0.2}>
-              <div className="flex flex-wrap justify-between gap-3 p-4">
-                <div className="flex min-w-72 flex-col gap-3">
-                  <p className="text-[#121416] tracking-light text-[32px] font-bold leading-tight">项目</p>
+              <div className="flex flex-col sm:flex-row sm:flex-wrap justify-between gap-3 p-4">
+                <div className="flex min-w-0 sm:min-w-72 flex-col gap-3">
+                  <p className="text-[#121416] tracking-light text-2xl sm:text-3xl lg:text-[32px] font-bold leading-tight">项目</p>
                   <p className="text-[#6a7681] text-sm font-normal leading-normal">
                     我参与过的一些项目，展示我的技能和经验。
                   </p>
                 </div>
                 {isEditMode && (
-                  <Button onClick={() => setShowProjectEditor(true)} className="flex items-center gap-2">
+                  <Button onClick={() => setShowProjectEditor(true)} className="flex items-center gap-2 w-full sm:w-auto">
                     <Plus className="w-4 h-4 mr-2" /> 新增项目
                   </Button>
                 )}
@@ -82,26 +82,26 @@ function ProjectsPageContent() {
                       }`}
                       style={project.image ? { backgroundImage: `url(${project.image})` } : {}}
                     />
-                    <div className="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-1 py-4 xl:px-4 px-4">
-                      <div className="flex items-start justify-between">
-                        <p className="text-[#121416] text-lg font-bold leading-tight tracking-[-0.015em] group-hover:text-blue-600 transition-colors duration-300">
+                    <div className="flex w-full min-w-0 xl:min-w-72 grow flex-col items-stretch justify-center gap-1 py-4 xl:px-4 px-4">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-0">
+                        <p className="text-[#121416] text-base sm:text-lg font-bold leading-tight tracking-[-0.015em] group-hover:text-blue-600 transition-colors duration-300">
                           {project.title}
                         </p>
                         {isEditMode && (
-                          <div className="flex gap-2 ml-4">
-                            <Button onClick={() => handleEditProject(project)} className="flex items-center gap-2">
+                          <div className="flex gap-2 sm:ml-4">
+                            <Button onClick={() => handleEditProject(project)} className="flex items-center gap-2 text-xs sm:text-sm">
                               <Edit className="w-3 h-3" /> 编辑
                             </Button>
-                            <Button onClick={() => handleDeleteProject(project.id)} className="flex items-center gap-2">
+                            <Button onClick={() => handleDeleteProject(project.id)} className="flex items-center gap-2 text-xs sm:text-sm">
                               <Trash2 className="w-3 h-3" /> 删除
                             </Button>
                           </div>
                         )}
                       </div>
-                      <div className="flex items-end gap-3 justify-between">
+                      <div className="flex flex-col sm:flex-row sm:items-end gap-3 sm:justify-between">
                         <div className="flex flex-col gap-1">
-                          <p className="text-[#6a7681] text-base font-normal leading-normal">{project.description}</p>
-                          <p className="text-[#6a7681] text-base font-normal leading-normal">角色：{project.role}</p>
+                          <p className="text-[#6a7681] text-sm sm:text-base font-normal leading-normal">{project.description}</p>
+                          <p className="text-[#6a7681] text-sm sm:text-base font-normal leading-normal">角色：{project.role}</p>
                           {project.technologies && project.technologies.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2">
                               {project.technologies.slice(0, 3).map((tech) => (
@@ -120,7 +120,7 @@ function ProjectsPageContent() {
                             </div>
                           )}
                         </div>
-                        <AnimatedButton variant="primary">
+                        <AnimatedButton variant="primary" className="w-full sm:w-auto mt-4 sm:mt-0">
                           {project.link ? (
                             <a href={project.link} target="_blank" rel="noopener noreferrer">
                               查看项目
