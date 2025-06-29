@@ -17,6 +17,10 @@ export interface Project {
   technologies?: string[]
   startDate?: string
   endDate?: string
+  media: ProjectMedia[]
+  featured: boolean
+  createdAt: string
+  updatedAt: string
 }
 
 export interface WorkExperience {
@@ -51,6 +55,21 @@ export interface PortfolioData {
   resume: Resume
 }
 
+// 新增：项目媒体文件接口
+export interface ProjectMedia {
+  id: string
+  type: 'image' | 'video'
+  url: string
+  filename: string
+  size: number // 文件大小（字节）
+  width?: number // 图片/视频宽度
+  height?: number // 图片/视频高度
+  duration?: number // 视频时长（秒）
+  thumbnail?: string // 视频缩略图URL
+  createdAt: string
+  order: number // 显示顺序
+}
+
 // 默认数据
 export const defaultPersonalInfo: PersonalInfo = {
   name: "陈明",
@@ -66,21 +85,45 @@ export const defaultProjects: Project[] = [
     title: "电子商务平台",
     description: "一个全面的电子商务平台，具有用户认证、产品管理和支付集成功能。",
     role: "全栈开发者",
-    gradient: "from-blue-100 to-blue-200"
+    gradient: "from-blue-100 to-blue-200",
+    technologies: ["React", "Node.js", "MongoDB", "Stripe", "AWS"],
+    startDate: "2023-01",
+    endDate: "2023-06",
+    link: "https://example.com/ecommerce",
+    media: [],
+    featured: true,
+    createdAt: "2023-01-15T00:00:00.000Z",
+    updatedAt: "2023-06-30T00:00:00.000Z"
   },
   {
     id: "2",
     title: "移动健身应用",
     description: "一款旨在跟踪健身活动、设定目标并提供个性化锻炼计划的移动应用程序。",
     role: "前端开发者",
-    gradient: "from-green-100 to-green-200"
+    gradient: "from-green-100 to-green-200",
+    technologies: ["React Native", "TypeScript", "Firebase", "Redux"],
+    startDate: "2023-03",
+    endDate: "2023-08",
+    link: "https://example.com/fitness-app",
+    media: [],
+    featured: true,
+    createdAt: "2023-03-01T00:00:00.000Z",
+    updatedAt: "2023-08-15T00:00:00.000Z"
   },
   {
     id: "3",
     title: "数据分析仪表板",
     description: "一个用于可视化复杂数据集并生成富有洞察力报告的交互式仪表板。",
     role: "数据工程师",
-    gradient: "from-purple-100 to-purple-200"
+    gradient: "from-purple-100 to-purple-200",
+    technologies: ["Python", "Django", "D3.js", "PostgreSQL", "Docker"],
+    startDate: "2023-05",
+    endDate: "2023-10",
+    link: "https://example.com/dashboard",
+    media: [],
+    featured: false,
+    createdAt: "2023-05-10T00:00:00.000Z",
+    updatedAt: "2023-10-20T00:00:00.000Z"
   }
 ]
 

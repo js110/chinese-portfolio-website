@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { ImageUpload } from "@/components/ImageUpload"
 import { TagInput } from "@/components/TagInput"
-import { Project } from "@/types/portfolio"
+import MediaUpload from "@/components/MediaUpload"
+import { Project, ProjectMedia } from "@/types/portfolio"
 import { usePortfolioData } from "@/hooks/usePortfolioData"
-import { Save } from "lucide-react"
+import { Save, X } from "lucide-react"
 
 interface ProjectEditorProps {
   project?: Project
@@ -40,7 +40,11 @@ export function ProjectEditor({ project, onClose, isEditing = false }: ProjectEd
       link: "",
       technologies: [],
       startDate: "",
-      endDate: ""
+      endDate: "",
+      media: [],
+      featured: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     }
   )
   const [errors, setErrors] = useState<Partial<Project>>({})
@@ -67,11 +71,17 @@ export function ProjectEditor({ project, onClose, isEditing = false }: ProjectEd
   const handleSave = async () => {
     if (!validateForm()) return
     
+    // 更新项目数据
+    const updatedData = {
+      ...formData,
+      updatedAt: new Date().toISOString()
+    }
+    
     let success = false
     if (isEditing) {
-      success = await updateProject(formData.id, formData)
+      success = await updateProject(formData.id, updatedData)
     } else {
-      success = await addProject(formData)
+      success = await addProject(updatedData)
     }
     
     if (success) {
@@ -79,12 +89,16 @@ export function ProjectEditor({ project, onClose, isEditing = false }: ProjectEd
     }
   }
 
-  const handleInputChange = (field: keyof Project, value: string | string[]) => {
+  const handleInputChange = (field: keyof Project, value: string | string[] | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     // 清除对应字段的错误
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }))
     }
+  }
+
+  const handleMediaChange = (media: ProjectMedia[]) => {
+    setFormData(prev => ({ ...prev, media }))
   }
 
   return (
@@ -96,7 +110,7 @@ export function ProjectEditor({ project, onClose, isEditing = false }: ProjectEd
       onClick={onClose}
     >
       <motion.div
-        className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 头部 */}
@@ -112,22 +126,21 @@ export function ProjectEditor({ project, onClose, isEditing = false }: ProjectEd
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
           >
+            <X className="h-5 w-5" />
           </Button>
         </div>
 
         {/* 表单内容 */}
         <div className="p-6 space-y-6">
-          {/* 项目图片 */}
+          {/* 项目媒体文件 */}
           <div className="space-y-3">
-            <Label className="text-sm font-medium text-gray-700">项目图片</Label>
-            <div className="flex justify-center">
-              <ImageUpload
-                currentImage={formData.image}
-                onImageChange={(imageData) => handleInputChange("image", imageData)}
-                size="md"
-                aspectRatio="video"
-              />
-            </div>
+            <Label className="text-sm font-medium text-gray-700">项目媒体文件</Label>
+            <MediaUpload
+              currentMedia={formData.media || []}
+              onMediaChange={handleMediaChange}
+              maxFiles={10}
+              maxFileSize={500 * 1024 * 1024} // 500MB
+            />
           </div>
 
           {/* 项目标题 */}
@@ -235,6 +248,20 @@ export function ProjectEditor({ project, onClose, isEditing = false }: ProjectEd
                 type="month"
               />
             </div>
+          </div>
+
+          {/* 特色项目 */}
+          <div className="space-y-2">
+            <Label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={formData.featured}
+                onChange={(e) => handleInputChange("featured", e.target.checked)}
+                className="rounded border-gray-300"
+              />
+              <span className="text-sm font-medium text-gray-700">设为特色项目</span>
+            </Label>
+            <p className="text-xs text-gray-500">特色项目将在首页突出显示</p>
           </div>
 
           {/* 背景渐变 */}
