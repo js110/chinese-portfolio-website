@@ -7,21 +7,22 @@ import { useEditMode } from "@/contexts/EditModeContext"
 import { usePortfolioData } from "@/hooks/usePortfolioData"
 import { useState } from "react"
 import { LoginDialog } from "@/components/LoginDialog"
-<<<<<<< HEAD
-import { Globe } from "lucide-react"
-=======
 import { Globe, Menu, X } from "lucide-react"
 import { Drawer, DrawerContent } from "@/components/ui/drawer"
->>>>>>> 904a281 (chore: 补交未暂存更改，确保工作区干净以便 rebase/push)
 
 export function Navbar() {
   const { isLoggedIn, logout } = useEditMode()
   const { data } = usePortfolioData()
   const [showLogin, setShowLogin] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const personalInfo = data?.personalInfo || {}
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
   return (
-    <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f1f2f4] px-10 py-3 bg-white z-40">
+    <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f1f2f4] px-4 sm:px-6 lg:px-10 py-3 bg-white z-40">
       <div className="flex items-center gap-4 text-[#121416]">
         <div className="size-7">
           {/* 彩色抽象个人品牌Logo */}
@@ -39,16 +40,13 @@ export function Navbar() {
           </svg>
         </div>
         <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-<<<<<<< HEAD
-          <Globe className="w-6 h-6" />
-          我的主页
-=======
           <span className="hidden sm:inline">我的主页</span>
           <span className="sm:hidden">主页</span>
->>>>>>> 904a281 (chore: 补交未暂存更改，确保工作区干净以便 rebase/push)
         </Link>
       </div>
-      <div className="flex flex-1 justify-end gap-8 items-center">
+
+      {/* 桌面端导航 */}
+      <div className="hidden md:flex flex-1 justify-end gap-8 items-center">
         <div className="flex items-center gap-9">
           <Link className="text-[#121416] text-sm font-medium leading-normal hover:text-blue-600" href="/">
             首页
@@ -60,7 +58,6 @@ export function Navbar() {
             简历
           </Link>
         </div>
-        {/* Globe 图标按钮已移除 */}
         {personalInfo.avatar ? (
           <div
             className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 shadow"
@@ -77,10 +74,7 @@ export function Navbar() {
         ) : (
           <Button className="bg-[#f1f2f4] text-[#121416] border-none hover:bg-gray-200 ml-2" onClick={() => setShowLogin(true)}>登录</Button>
         )}
-        <LoginDialog open={showLogin} onClose={() => setShowLogin(false)} />
       </div>
-<<<<<<< HEAD
-=======
 
       {/* 移动端汉堡菜单按钮 */}
       <div className="md:hidden flex items-center gap-2">
@@ -115,7 +109,6 @@ export function Navbar() {
       </Drawer>
 
       <LoginDialog open={showLogin} onClose={() => setShowLogin(false)} />
->>>>>>> 904a281 (chore: 补交未暂存更改，确保工作区干净以便 rebase/push)
     </header>
   )
 }
