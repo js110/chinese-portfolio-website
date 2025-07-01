@@ -3,8 +3,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import MediaUpload from '@/components/MediaUpload';
-import MediaCarousel from '@/components/MediaCarousel';
 import ProjectFilters, { SortOption, ViewMode } from '@/components/ProjectFilters';
 import AdvancedProjectCard from '@/components/AdvancedProjectCard';
 import { Project, ProjectMedia } from '@/types/portfolio';
@@ -50,29 +48,6 @@ function TestPageContent() {
           <h1 className="text-3xl font-bold text-gray-900 mb-4">功能测试页面</h1>
           <p className="text-gray-600">测试所有新实现的高级项目功能</p>
         </div>
-
-        {/* 媒体上传测试 */}
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">媒体上传测试</h2>
-          <MediaUpload
-            currentMedia={testMedia}
-            onMediaChange={setTestMedia}
-            maxFiles={5}
-            maxFileSize={50 * 1024 * 1024} // 50MB for testing
-          />
-        </Card>
-
-        {/* 媒体轮播测试 */}
-        {testMedia.length > 0 && (
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">媒体轮播测试</h2>
-            <MediaCarousel
-              media={testMedia}
-              showThumbnails={true}
-              autoPlay={false}
-            />
-          </Card>
-        )}
 
         {/* 项目筛选测试 */}
         <Card className="p-6">
@@ -142,7 +117,6 @@ function TestPageContent() {
         <Card className="p-6">
           <h2 className="text-xl font-semibold mb-4">功能说明</h2>
           <div className="space-y-2 text-sm text-gray-600">
-            <p>✅ <strong>媒体上传：</strong>支持拖拽上传图片和视频文件，最大500MB</p>
             <p>✅ <strong>媒体轮播：</strong>支持图片和视频轮播，全屏查看，缩略图导航</p>
             <p>✅ <strong>项目筛选：</strong>支持搜索、标签筛选、排序、视图模式切换</p>
             <p>✅ <strong>高级卡片：</strong>支持网格和列表两种视图，媒体预览，编辑删除</p>

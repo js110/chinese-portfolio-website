@@ -4,6 +4,7 @@ import { useState, useRef } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { X, Image as ImageIcon } from "lucide-react"
+import Cropper from 'react-easy-crop';
 
 interface ImageUploadProps {
   currentImage?: string
@@ -23,6 +24,11 @@ export function ImageUpload({
   const [isDragging, setIsDragging] = useState(false)
   const [preview, setPreview] = useState<string | null>(currentImage || null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [rawImage, setRawImage] = useState<string | null>(null);
 
   const sizeClasses = {
     sm: "w-20 h-20",
@@ -41,8 +47,8 @@ export function ImageUpload({
       const reader = new FileReader()
       reader.onload = (e) => {
         const result = e.target?.result as string
-        setPreview(result)
-        onImageChange(result)
+        setRawImage(result)
+        setShowCropper(true)
       }
       reader.readAsDataURL(file)
     }
@@ -86,6 +92,52 @@ export function ImageUpload({
   const handleClick = () => {
     fileInputRef.current?.click()
   }
+
+  const onCropComplete = (croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  };
+
+  async function getCroppedImg(imageSrc, crop) {
+    const image = new window.Image();
+    image.src = imageSrc;
+    await new Promise((resolve) => { image.onload = resolve; });
+    const canvas = document.createElement('canvas');
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(
+      image,
+      crop.x,
+      crop.y,
+      crop.width,
+      crop.height,
+      0,
+      0,
+      crop.width,
+      crop.height
+    );
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        resolve(blob);
+      }, 'image/jpeg');
+    });
+  }
+
+  const handleCropConfirm = async () => {
+    if (!rawImage || !croppedAreaPixels) return;
+    const croppedBlob = await getCroppedImg(rawImage, croppedAreaPixels);
+    const formData = new FormData();
+    formData.append('file', croppedBlob, 'cropped.jpg');
+    formData.append('projectId', 'cover');
+    const res = await fetch('/api/upload-media', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.success && data.file && data.file.url) {
+      setPreview(data.file.url);
+      onImageChange(data.file.url);
+      setShowCropper(false);
+      setRawImage(null);
+    }
+  };
 
   return (
     <div className={`relative ${className}`}>
@@ -144,6 +196,28 @@ export function ImageUpload({
         onChange={handleFileInputChange}
         className="hidden"
       />
+
+      {showCropper && rawImage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+          <div className="bg-white p-4 rounded shadow-lg">
+            <div className="relative w-[300px] h-[300px]">
+              <Cropper
+                image={rawImage}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+              />
+            </div>
+            <div className="flex justify-end gap-2 mt-4">
+              <button onClick={() => setShowCropper(false)} className="px-3 py-1 bg-gray-200 rounded">取消</button>
+              <button onClick={handleCropConfirm} className="px-3 py-1 bg-blue-600 text-white rounded">确定裁剪</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 } 

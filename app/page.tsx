@@ -118,21 +118,7 @@ function HomePageContent() {
                 <StaggerContainer className="flex items-stretch p-4 gap-3" staggerDelay={0.2}>
                   {projects.slice(0, 3).map((project) => (
                     <StaggerItem key={project.id} className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60 sm:min-w-0 hover:transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                      <div 
-                        className={`w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl flex flex-col shadow-md hover:shadow-lg transition-shadow duration-300 ${
-                          project.image 
-                            ? "bg-cover" 
-                            : `bg-gradient-to-br ${project.gradient}`
-                        }`}
-                        style={project.image ? { backgroundImage: `url(${project.image})` } : {}}
-                        onClick={handleProjectClick}
-                      />
-                      <div onClick={handleProjectClick} className="px-2 sm:px-0">
-                        <p className="text-[#121416] text-sm sm:text-base font-medium leading-normal">{project.title}</p>
-                        <p className="text-[#6a7681] text-xs sm:text-sm font-normal leading-normal">
-                          {project.description}
-                        </p>
-                      </div>
+                      <AdvancedProjectCard project={project} viewMode="grid" />
                     </StaggerItem>
                   ))}
                 </StaggerContainer>

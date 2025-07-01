@@ -17,10 +17,13 @@ export interface Project {
   technologies?: string[]
   startDate?: string
   endDate?: string
-  media: ProjectMedia[]
+  coverImage?: string // 新增：项目封面图
   featured: boolean
   createdAt: string
   updatedAt: string
+  highlights?: string[]; // 项目亮点
+  team?: { name: string; role: string; avatar?: string }[]; // 团队成员
+  screenshots?: string[]; // 项目截图图片URL
 }
 
 export interface WorkExperience {
@@ -55,21 +58,6 @@ export interface PortfolioData {
   resume: Resume
 }
 
-// 新增：项目媒体文件接口
-export interface ProjectMedia {
-  id: string
-  type: 'image' | 'video'
-  url: string
-  filename: string
-  size: number // 文件大小（字节）
-  width?: number // 图片/视频宽度
-  height?: number // 图片/视频高度
-  duration?: number // 视频时长（秒）
-  thumbnail?: string // 视频缩略图URL
-  createdAt: string
-  order: number // 显示顺序
-}
-
 // 默认数据
 export const defaultPersonalInfo: PersonalInfo = {
   name: "陈明",
@@ -90,10 +78,17 @@ export const defaultProjects: Project[] = [
     startDate: "2023-01",
     endDate: "2023-06",
     link: "https://example.com/ecommerce",
-    media: [],
+    coverImage: "https://example.com/ecommerce-cover.jpg",
     featured: true,
     createdAt: "2023-01-15T00:00:00.000Z",
-    updatedAt: "2023-06-30T00:00:00.000Z"
+    updatedAt: "2023-06-30T00:00:00.000Z",
+    highlights: ["用户认证功能", "产品管理功能", "支付集成功能"],
+    team: [
+      { name: "张三", role: "全栈开发者", avatar: "" },
+      { name: "李四", role: "前端开发者", avatar: "" },
+      { name: "王五", role: "后端开发者", avatar: "" }
+    ],
+    screenshots: ["https://example.com/ecommerce-screenshot1.jpg", "https://example.com/ecommerce-screenshot2.jpg"]
   },
   {
     id: "2",
@@ -105,10 +100,16 @@ export const defaultProjects: Project[] = [
     startDate: "2023-03",
     endDate: "2023-08",
     link: "https://example.com/fitness-app",
-    media: [],
+    coverImage: "https://example.com/fitness-app-cover.jpg",
     featured: true,
     createdAt: "2023-03-01T00:00:00.000Z",
-    updatedAt: "2023-08-15T00:00:00.000Z"
+    updatedAt: "2023-08-15T00:00:00.000Z",
+    highlights: ["个性化锻炼计划", "健身活动跟踪", "目标设定功能"],
+    team: [
+      { name: "赵六", role: "前端开发者", avatar: "" },
+      { name: "孙七", role: "后端开发者", avatar: "" }
+    ],
+    screenshots: ["https://example.com/fitness-app-screenshot1.jpg", "https://example.com/fitness-app-screenshot2.jpg"]
   },
   {
     id: "3",
@@ -120,10 +121,15 @@ export const defaultProjects: Project[] = [
     startDate: "2023-05",
     endDate: "2023-10",
     link: "https://example.com/dashboard",
-    media: [],
+    coverImage: "https://example.com/dashboard-cover.jpg",
     featured: false,
     createdAt: "2023-05-10T00:00:00.000Z",
-    updatedAt: "2023-10-20T00:00:00.000Z"
+    updatedAt: "2023-10-20T00:00:00.000Z",
+    highlights: ["数据可视化", "富有洞察力报告", "交互式仪表板"],
+    team: [
+      { name: "周八", role: "数据工程师", avatar: "" }
+    ],
+    screenshots: ["https://example.com/dashboard-screenshot1.jpg", "https://example.com/dashboard-screenshot2.jpg"]
   }
 ]
 

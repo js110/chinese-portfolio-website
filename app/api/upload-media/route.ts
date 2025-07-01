@@ -5,7 +5,6 @@ import { existsSync } from 'fs';
 
 const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg', 'video/mov'];
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,11 +36,9 @@ export async function POST(request: NextRequest) {
 
     // 验证文件类型
     const isImage = ALLOWED_IMAGE_TYPES.includes(file.type);
-    const isVideo = ALLOWED_VIDEO_TYPES.includes(file.type);
-
-    if (!isImage && !isVideo) {
+    if (!isImage) {
       return NextResponse.json(
-        { error: '不支持的文件类型' },
+        { error: '只允许上传图片类型' },
         { status: 400 }
       );
     }
@@ -71,7 +68,7 @@ export async function POST(request: NextRequest) {
       success: true,
       file: {
         id: `${timestamp}-${randomId}`,
-        type: isImage ? 'image' : 'video',
+        type: 'image',
         url: fileUrl,
         filename: file.name,
         size: file.size,

@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { TagInput } from "@/components/TagInput"
-import MediaUpload from "@/components/MediaUpload"
 import { Project, ProjectMedia } from "@/types/portfolio"
 import { usePortfolioData } from "@/hooks/usePortfolioData"
 import { Save, X } from "lucide-react"
@@ -132,17 +131,6 @@ export function ProjectEditor({ project, onClose, isEditing = false }: ProjectEd
 
         {/* 表单内容 */}
         <div className="p-6 space-y-6">
-          {/* 项目媒体文件 */}
-          <div className="space-y-3">
-            <Label className="text-sm font-medium text-gray-700">项目媒体文件</Label>
-            <MediaUpload
-              currentMedia={formData.media || []}
-              onMediaChange={handleMediaChange}
-              maxFiles={10}
-              maxFileSize={500 * 1024 * 1024} // 500MB
-            />
-          </div>
-
           {/* 项目标题 */}
           <div className="space-y-2">
             <Label htmlFor="title" className="text-sm font-medium text-gray-700">

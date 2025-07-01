@@ -7,7 +7,8 @@ import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
 import { Project, ProjectMedia } from '@/types/portfolio';
-import MediaCarousel from './MediaCarousel';
+import ProjectDetailDialog from './ProjectDetailDialog';
+import { useRouter } from 'next/navigation';
 
 export type ViewMode = 'grid' | 'list';
 
@@ -26,7 +27,7 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
   onDelete,
   className
 }) => {
-  const [showMediaCarousel, setShowMediaCarousel] = useState(false);
+  const router = useRouter();
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -50,42 +51,16 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
 
   if (viewMode === 'list') {
     return (
-      <Card className={cn('p-4 hover:shadow-lg transition-all duration-300', className)}>
+      <Card className={cn('p-4 hover:shadow-lg transition-all duration-300 cursor-pointer', className)} onClick={() => router.push(`/projects/${project.id}`)}>
         <div className="flex flex-col lg:flex-row gap-4">
           {/* 媒体区域 */}
           <div className="lg:w-1/3">
-            {project.media && project.media.length > 0 ? (
-              <div className="relative">
-                <div 
-                  className="aspect-video bg-gray-100 rounded-lg overflow-hidden cursor-pointer"
-                  onClick={() => setShowMediaCarousel(true)}
-                >
-                  {project.media[0].type === 'image' ? (
-                    <img
-                      src={project.media[0].url}
-                      alt={project.media[0].filename}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-900">
-                      {project.media[0].thumbnail ? (
-                        <img
-                          src={project.media[0].thumbnail}
-                          alt={project.media[0].filename}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="text-white text-sm">视频</div>
-                      )}
-                    </div>
-                  )}
-                  {project.media.length > 1 && (
-                    <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-                      +{project.media.length - 1}
-                    </div>
-                  )}
-                </div>
-              </div>
+            {project.coverImage ? (
+              <img
+                src={project.coverImage}
+                alt={project.title}
+                className="w-full h-full object-cover aspect-video rounded-lg"
+              />
             ) : (
               <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
                 <span className="text-gray-400">暂无媒体</span>
@@ -106,7 +81,6 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
                 <p className="text-gray-600 mb-2">{project.description}</p>
                 <p className="text-sm text-gray-500">角色：{project.role}</p>
               </div>
-              
               {/* 操作按钮 */}
               <div className="flex items-center gap-2">
                 {project.link && (
@@ -128,7 +102,6 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
                 )}
               </div>
             </div>
-
             {/* 技术栈 */}
             {project.technologies && project.technologies.length > 0 && (
               <div className="flex flex-wrap gap-1">
@@ -139,7 +112,6 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
                 ))}
               </div>
             )}
-
             {/* 项目信息 */}
             <div className="flex items-center gap-4 text-xs text-gray-500">
               {project.startDate && (
@@ -148,33 +120,9 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
               {project.endDate && (
                 <span>结束：{project.endDate}</span>
               )}
-              {project.media && project.media.length > 0 && (
-                <span>媒体：{project.media.length} 个文件</span>
-              )}
             </div>
           </div>
         </div>
-
-        {/* 媒体轮播弹窗 */}
-        {showMediaCarousel && project.media && project.media.length > 0 && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-            <div className="relative max-w-4xl w-full">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="absolute top-4 right-4 bg-black/50 text-white hover:bg-black/70 z-10"
-                onClick={() => setShowMediaCarousel(false)}
-              >
-                <X className="h-6 w-6" />
-              </Button>
-              <MediaCarousel
-                media={project.media}
-                showThumbnails={true}
-                autoPlay={false}
-              />
-            </div>
-          </div>
-        )}
       </Card>
     );
   }
@@ -184,36 +132,13 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
     <Card className={cn('group hover:shadow-lg transition-all duration-300 overflow-hidden', className)}>
       {/* 媒体区域 */}
       <div className="relative">
-        {project.media && project.media.length > 0 ? (
-          <div 
-            className="aspect-video bg-gray-100 cursor-pointer"
-            onClick={() => setShowMediaCarousel(true)}
-          >
-            {project.media[0].type === 'image' ? (
-              <img
-                src={project.media[0].url}
-                alt={project.media[0].filename}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-900">
-                {project.media[0].thumbnail ? (
-                  <img
-                    src={project.media[0].thumbnail}
-                    alt={project.media[0].filename}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="text-white text-sm">视频</div>
-                )}
-              </div>
-            )}
-            {project.media.length > 1 && (
-              <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-                +{project.media.length - 1}
-              </div>
-            )}
-          </div>
+        {project.coverImage ? (
+          <img
+            src={project.coverImage}
+            alt={project.title}
+            className="w-full h-full object-cover aspect-video rounded-lg cursor-pointer"
+            onClick={() => router.push(`/projects/${project.id}`)}
+          />
         ) : (
           <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
             <span className="text-gray-400">暂无媒体</span>
@@ -281,32 +206,8 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
             {project.startDate && <span>{project.startDate}</span>}
             {project.endDate && <span>- {project.endDate}</span>}
           </div>
-          {project.media && project.media.length > 0 && (
-            <span>{project.media.length} 个媒体文件</span>
-          )}
         </div>
       </div>
-
-      {/* 媒体轮播弹窗 */}
-      {showMediaCarousel && project.media && project.media.length > 0 && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="relative max-w-4xl w-full">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="absolute top-4 right-4 bg-black/50 text-white hover:bg-black/70 z-10"
-              onClick={() => setShowMediaCarousel(false)}
-            >
-              <X className="h-6 w-6" />
-            </Button>
-            <MediaCarousel
-              media={project.media}
-              showThumbnails={true}
-              autoPlay={false}
-            />
-          </div>
-        </div>
-      )}
     </Card>
   );
 };
