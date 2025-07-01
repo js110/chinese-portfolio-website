@@ -17,17 +17,6 @@ const ProjectDetailView: React.FC<ProjectDetailViewProps> = ({ project }) => {
             <img src={project.coverImage} alt="项目封面" className="rounded-lg max-h-96 object-contain" />
           </div>
         )}
-        {/* 项目截图区 */}
-        {project.screenshots && project.screenshots.length > 0 && (
-          <div className="mt-4 w-full">
-            <div className="font-semibold text-gray-700 mb-2">项目截图</div>
-            <div className="grid grid-cols-2 gap-2">
-              {project.screenshots.map((url, idx) => (
-                <img key={idx} src={url} alt={`项目截图${idx+1}`} className="rounded shadow object-cover w-full h-32 cursor-pointer" onClick={() => window.open(url, '_blank')} />
-              ))}
-            </div>
-          </div>
-        )}
       </div>
       {/* 右侧：项目信息 */}
       <div className="md:w-1/2 w-full flex flex-col gap-4 p-6 overflow-y-auto">

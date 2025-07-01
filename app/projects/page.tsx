@@ -14,12 +14,14 @@ import { Project } from "@/types/portfolio"
 import { EditModeProvider } from "@/contexts/EditModeContext"
 import { Navbar } from "@/components/Navbar"
 import { Plus } from "lucide-react"
+import ProjectDetailDialog from "@/components/ProjectDetailDialog"
 
 function ProjectsPageContent() {
   const { data, loading, deleteProject } = usePortfolioData()
   const [showProjectEditor, setShowProjectEditor] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const { isEditMode } = useEditMode()
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   // 过滤器状态
   const [filters, setFilters] = useState({
@@ -150,6 +152,7 @@ function ProjectsPageContent() {
                           viewMode="grid"
                           onEdit={isEditMode ? () => handleEditProject(project) : undefined}
                           onDelete={isEditMode ? () => handleDeleteProject(project.id) : undefined}
+                          onShowDetail={() => setSelectedProject(project)}
                         />
                       ))}
                     </div>
@@ -162,6 +165,7 @@ function ProjectsPageContent() {
                           viewMode="list"
                           onEdit={isEditMode ? () => handleEditProject(project) : undefined}
                           onDelete={isEditMode ? () => handleDeleteProject(project.id) : undefined}
+                          onShowDetail={() => setSelectedProject(project)}
                         />
                       ))}
                     </div>
@@ -201,6 +205,11 @@ function ProjectsPageContent() {
           onClose={handleCloseEditor}
           isEditing={!!editingProject}
         />
+      )}
+
+      {/* 项目详情弹窗 */}
+      {selectedProject && (
+        <ProjectDetailDialog project={selectedProject} onClose={() => setSelectedProject(null)} />
       )}
     </div>
   )

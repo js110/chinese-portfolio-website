@@ -3,9 +3,12 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { useEditMode } from "@/contexts/EditModeContext"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export function EditModeToggle({ className = "" }: { className?: string }) {
   const { isEditMode, toggleEditMode } = useEditMode()
+  const isMobile = useIsMobile()
+  if (isMobile) return null;
 
   return (
     <motion.div

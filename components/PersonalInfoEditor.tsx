@@ -11,6 +11,7 @@ import { TagInput } from "@/components/TagInput"
 import { PersonalInfo } from "@/types/portfolio"
 import { usePortfolioData } from "@/hooks/usePortfolioData"
 import { Save, X } from "lucide-react"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface PersonalInfoEditorProps {
   personalInfo: PersonalInfo
@@ -21,6 +22,8 @@ export function PersonalInfoEditor({ personalInfo, onClose }: PersonalInfoEditor
   const { updatePersonalInfo, saving } = usePortfolioData()
   const [formData, setFormData] = useState<PersonalInfo>(personalInfo)
   const [errors, setErrors] = useState<Partial<PersonalInfo>>({})
+  const isMobile = useIsMobile()
+  if (isMobile) return null;
 
   const validateForm = (): boolean => {
     const newErrors: Partial<PersonalInfo> = {}

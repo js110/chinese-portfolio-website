@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { TagInput } from "@/components/TagInput"
-import { Project, ProjectMedia } from "@/types/portfolio"
+import { Project } from "@/types/portfolio"
 import { usePortfolioData } from "@/hooks/usePortfolioData"
 import { Save, X } from "lucide-react"
+import { ImageUpload } from "@/components/ImageUpload"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface ProjectEditorProps {
   project?: Project
@@ -40,13 +42,14 @@ export function ProjectEditor({ project, onClose, isEditing = false }: ProjectEd
       technologies: [],
       startDate: "",
       endDate: "",
-      media: [],
       featured: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
   )
   const [errors, setErrors] = useState<Partial<Project>>({})
+  const isMobile = useIsMobile()
+  if (isMobile) return null;
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Project> = {}
@@ -94,10 +97,6 @@ export function ProjectEditor({ project, onClose, isEditing = false }: ProjectEd
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }))
     }
-  }
-
-  const handleMediaChange = (media: ProjectMedia[]) => {
-    setFormData(prev => ({ ...prev, media }))
   }
 
   return (
@@ -271,6 +270,19 @@ export function ProjectEditor({ project, onClose, isEditing = false }: ProjectEd
                 </Button>
               ))}
             </div>
+          </div>
+
+          {/* 项目封面图 */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-gray-700">项目封面图</Label>
+            <ImageUpload
+              currentImage={formData.coverImage || ""}
+              onImageChange={(img) => handleInputChange("coverImage", img)}
+              size="md"
+              aspectRatio="auto"
+              className="mb-2"
+            />
+            <p className="text-xs text-gray-400">支持 JPG/PNG，建议尺寸 800x600 及以上，移动端可拍照上传，允许为空</p>
           </div>
         </div>
 

@@ -9,6 +9,7 @@ import { useState } from "react"
 import { LoginDialog } from "@/components/LoginDialog"
 import { Globe, Menu, X } from "lucide-react"
 import { Drawer, DrawerContent } from "@/components/ui/drawer"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export function Navbar() {
   const { isLoggedIn, logout } = useEditMode()
@@ -16,6 +17,7 @@ export function Navbar() {
   const [showLogin, setShowLogin] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const personalInfo = data?.personalInfo || {}
+  const isMobile = useIsMobile()
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
@@ -46,35 +48,37 @@ export function Navbar() {
       </div>
 
       {/* 桌面端导航 */}
-      <div className="hidden md:flex flex-1 justify-end gap-8 items-center">
-        <div className="flex items-center gap-9">
-          <Link className="text-[#121416] text-sm font-medium leading-normal hover:text-blue-600" href="/">
-            首页
-          </Link>
-          <Link className="text-[#121416] text-sm font-medium leading-normal hover:text-blue-600" href="/projects">
-            项目
-          </Link>
-          <Link className="text-[#121416] text-sm font-medium leading-normal hover:text-blue-600" href="/resume">
-            简历
-          </Link>
+      {!isMobile && (
+        <div className="hidden md:flex flex-1 justify-end gap-8 items-center">
+          <div className="flex items-center gap-9">
+            <Link className="text-[#121416] text-sm font-medium leading-normal hover:text-blue-600" href="/">
+              首页
+            </Link>
+            <Link className="text-[#121416] text-sm font-medium leading-normal hover:text-blue-600" href="/projects">
+              项目
+            </Link>
+            <Link className="text-[#121416] text-sm font-medium leading-normal hover:text-blue-600" href="/resume">
+              简历
+            </Link>
+          </div>
+          {personalInfo.avatar ? (
+            <div
+              className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 shadow"
+              style={{ backgroundImage: `url(${personalInfo.avatar})` }}
+            />
+          ) : (
+            <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 bg-gray-300" />
+          )}
+          {isLoggedIn ? (
+            <>
+              <EditModeToggle className="ml-2" />
+              <Button className="bg-[#f1f2f4] text-[#121416] border-none hover:bg-gray-200 ml-2" onClick={logout}>退出登录</Button>
+            </>
+          ) : (
+            <Button className="bg-[#f1f2f4] text-[#121416] border-none hover:bg-gray-200 ml-2" onClick={() => setShowLogin(true)}>登录</Button>
+          )}
         </div>
-        {personalInfo.avatar ? (
-          <div
-            className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 shadow"
-            style={{ backgroundImage: `url(${personalInfo.avatar})` }}
-          />
-        ) : (
-          <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 bg-gray-300" />
-        )}
-        {isLoggedIn ? (
-          <>
-            <EditModeToggle className="ml-2" />
-            <Button className="bg-[#f1f2f4] text-[#121416] border-none hover:bg-gray-200 ml-2" onClick={logout}>退出登录</Button>
-          </>
-        ) : (
-          <Button className="bg-[#f1f2f4] text-[#121416] border-none hover:bg-gray-200 ml-2" onClick={() => setShowLogin(true)}>登录</Button>
-        )}
-      </div>
+      )}
 
       {/* 移动端汉堡菜单按钮 */}
       <div className="md:hidden flex items-center gap-2">
@@ -108,7 +112,7 @@ export function Navbar() {
         </DrawerContent>
       </Drawer>
 
-      <LoginDialog open={showLogin} onClose={() => setShowLogin(false)} />
+      {!isMobile && <LoginDialog open={showLogin} onClose={() => setShowLogin(false)} />}
     </header>
   )
 }

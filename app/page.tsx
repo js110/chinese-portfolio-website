@@ -16,12 +16,15 @@ import { EditModeProvider } from "@/contexts/EditModeContext"
 import { LoginDialog } from "@/components/LoginDialog"
 import { Navbar } from "@/components/Navbar"
 import { useRouter } from "next/navigation"
+import { Project } from "@/types/portfolio"
+import ProjectDetailDialog from "@/components/ProjectDetailDialog"
 
 function HomePageContent() {
   const { data, loading } = usePortfolioData()
   const [showPersonalInfoEditor, setShowPersonalInfoEditor] = useState(false)
   const { isEditMode } = useEditMode()
   const router = useRouter()
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   if (loading) {
     return (
@@ -118,12 +121,20 @@ function HomePageContent() {
                 <StaggerContainer className="flex items-stretch p-4 gap-3" staggerDelay={0.2}>
                   {projects.slice(0, 3).map((project) => (
                     <StaggerItem key={project.id} className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60 sm:min-w-0 hover:transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                      <AdvancedProjectCard project={project} viewMode="grid" />
+                      <AdvancedProjectCard 
+                        project={project} 
+                        viewMode="grid" 
+                        onShowDetail={() => setSelectedProject(project)}
+                      />
                     </StaggerItem>
                   ))}
                 </StaggerContainer>
               </div>
             </ScrollReveal>
+
+            {selectedProject && (
+              <ProjectDetailDialog project={selectedProject} onClose={() => setSelectedProject(null)} />
+            )}
 
             <ScrollReveal delay={0.2}>
               <h2 className="text-[#121416] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">

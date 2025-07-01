@@ -6,7 +6,7 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
-import { Project, ProjectMedia } from '@/types/portfolio';
+import { Project } from '@/types/portfolio';
 import ProjectDetailDialog from './ProjectDetailDialog';
 import { useRouter } from 'next/navigation';
 
@@ -17,6 +17,7 @@ interface AdvancedProjectCardProps {
   viewMode: ViewMode;
   onEdit?: () => void;
   onDelete?: () => void;
+  onShowDetail?: () => void;
   className?: string;
 }
 
@@ -25,6 +26,7 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
   viewMode,
   onEdit,
   onDelete,
+  onShowDetail,
   className
 }) => {
   const router = useRouter();
@@ -51,7 +53,7 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
 
   if (viewMode === 'list') {
     return (
-      <Card className={cn('p-4 hover:shadow-lg transition-all duration-300 cursor-pointer', className)} onClick={() => router.push(`/projects/${project.id}`)}>
+      <Card className={cn('p-4 hover:shadow-lg transition-all duration-300 cursor-pointer', className)}>
         <div className="flex flex-col lg:flex-row gap-4">
           {/* 媒体区域 */}
           <div className="lg:w-1/3">
@@ -59,7 +61,8 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
               <img
                 src={project.coverImage}
                 alt={project.title}
-                className="w-full h-full object-cover aspect-video rounded-lg"
+                className="w-full h-full object-cover aspect-video rounded-lg cursor-pointer"
+                onClick={onShowDetail}
               />
             ) : (
               <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
@@ -73,7 +76,7 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <h3 className="text-lg font-bold text-gray-900">{project.title}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 cursor-pointer" onClick={onShowDetail}>{project.title}</h3>
                   {project.featured && (
                     <Badge variant="default" className="text-xs">特色</Badge>
                   )}
@@ -137,7 +140,7 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
             src={project.coverImage}
             alt={project.title}
             className="w-full h-full object-cover aspect-video rounded-lg cursor-pointer"
-            onClick={() => router.push(`/projects/${project.id}`)}
+            onClick={onShowDetail}
           />
         ) : (
           <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
@@ -177,7 +180,7 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
       {/* 内容区域 */}
       <div className="p-4 space-y-3">
         <div>
-          <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+          <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors cursor-pointer" onClick={onShowDetail}>
             {project.title}
           </h3>
           <p className="text-gray-600 text-sm mb-2 line-clamp-2">{project.description}</p>

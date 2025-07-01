@@ -23,7 +23,6 @@ export interface Project {
   updatedAt: string
   highlights?: string[]; // 项目亮点
   team?: { name: string; role: string; avatar?: string }[]; // 团队成员
-  screenshots?: string[]; // 项目截图图片URL
 }
 
 export interface WorkExperience {
@@ -87,8 +86,7 @@ export const defaultProjects: Project[] = [
       { name: "张三", role: "全栈开发者", avatar: "" },
       { name: "李四", role: "前端开发者", avatar: "" },
       { name: "王五", role: "后端开发者", avatar: "" }
-    ],
-    screenshots: ["https://example.com/ecommerce-screenshot1.jpg", "https://example.com/ecommerce-screenshot2.jpg"]
+    ]
   },
   {
     id: "2",
@@ -108,8 +106,7 @@ export const defaultProjects: Project[] = [
     team: [
       { name: "赵六", role: "前端开发者", avatar: "" },
       { name: "孙七", role: "后端开发者", avatar: "" }
-    ],
-    screenshots: ["https://example.com/fitness-app-screenshot1.jpg", "https://example.com/fitness-app-screenshot2.jpg"]
+    ]
   },
   {
     id: "3",
@@ -128,8 +125,7 @@ export const defaultProjects: Project[] = [
     highlights: ["数据可视化", "富有洞察力报告", "交互式仪表板"],
     team: [
       { name: "周八", role: "数据工程师", avatar: "" }
-    ],
-    screenshots: ["https://example.com/dashboard-screenshot1.jpg", "https://example.com/dashboard-screenshot2.jpg"]
+    ]
   }
 ]
 
