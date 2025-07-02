@@ -8,19 +8,22 @@ import { ScrollReveal } from "@/components/animations/scroll-reveal"
 import { StaggerContainer, StaggerItem } from "@/components/animations/stagger-container"
 import { FloatingElement } from "@/components/animations/floating-element"
 import { EditModeToggle } from "@/components/EditModeToggle"
-import { PersonalInfoEditor } from "@/components/PersonalInfoEditor"
-import AdvancedProjectCard from "@/components/AdvancedProjectCard"
 import { useEditMode } from "@/contexts/EditModeContext"
-import { usePortfolioData } from "@/hooks/usePortfolioData"
+import { useHomePortfolioData } from "@/hooks/usePortfolioData"
 import { EditModeProvider } from "@/contexts/EditModeContext"
 import { LoginDialog } from "@/components/LoginDialog"
 import { Navbar } from "@/components/Navbar"
 import { useRouter } from "next/navigation"
 import { Project } from "@/types/portfolio"
-import ProjectDetailDialog from "@/components/ProjectDetailDialog"
+import dynamic from 'next/dynamic'
+import Image from 'next/image'
+
+const AdvancedProjectCard = dynamic(() => import('@/components/AdvancedProjectCard'))
+const PersonalInfoEditor = dynamic(() => import('@/components/PersonalInfoEditor').then(mod => mod.PersonalInfoEditor))
+const ProjectDetailDialog = dynamic(() => import('@/components/ProjectDetailDialog'))
 
 function HomePageContent() {
-  const { data, loading } = usePortfolioData()
+  const { data, loading } = useHomePortfolioData()
   const [showPersonalInfoEditor, setShowPersonalInfoEditor] = useState(false)
   const { isEditMode } = useEditMode()
   const router = useRouter()
@@ -37,9 +40,9 @@ function HomePageContent() {
   const { personalInfo, projects, resume } = data
 
   // 获取特色项目
-  const featuredProjects = projects.filter(project => project.featured).slice(0, 3)
-  const otherProjects = projects.filter(project => !project.featured).slice(0, 3 - featuredProjects.length)
-  const displayProjects = [...featuredProjects, ...otherProjects].slice(0, 3)
+  const featuredProjects = projects.filter((project: Project) => project.featured).slice(0, 3)
+  const otherProjects = projects.filter((project: Project) => !project.featured).slice(0, 3 - featuredProjects.length)
+  const displayProjects: Project[] = [...featuredProjects, ...otherProjects].slice(0, 3)
 
   const handleProjectClick = () => {
     router.push('/projects')
@@ -61,14 +64,18 @@ function HomePageContent() {
                   <div className="flex gap-4 flex-col items-center">
                     <FloatingElement delay={0.4}>
                       <div className="relative">
-                        <div 
-                          className={`bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 shadow-lg ${
-                            personalInfo.avatar 
-                              ? "bg-cover" 
-                              : "bg-gray-300"
-                          }`}
-                          style={personalInfo.avatar ? { backgroundImage: `url(${personalInfo.avatar})` } : {}}
-                        />
+                        {personalInfo.avatar ? (
+                          <Image
+                            src={personalInfo.avatar}
+                            alt={personalInfo.name || '头像'}
+                            width={128}
+                            height={128}
+                            className="rounded-full min-h-32 w-32 shadow-lg object-cover"
+                            priority
+                          />
+                        ) : (
+                          <div className="bg-gray-300 rounded-full min-h-32 w-32 shadow-lg" />
+                        )}
                         {isEditMode && (
                           <Button
                             className="absolute -bottom-2 -right-2 w-8 h-8 p-0 rounded-full bg-blue-600 hover:bg-blue-700"
@@ -97,7 +104,7 @@ function HomePageContent() {
               </div>
             </FadeIn>
 
-            <FadeIn delay={0.8}>
+            <FadeIn delay={0.8} performanceMode lazy>
               <div className="flex justify-center">
                 <div className="flex flex-1 gap-3 flex-wrap px-4 py-3 max-w-[480px] justify-center">
                   <Button 
@@ -116,10 +123,10 @@ function HomePageContent() {
               </h2>
             </ScrollReveal>
             
-            <ScrollReveal delay={0.4}>
+            <ScrollReveal delay={0.4} performanceMode lazy>
               <div className="flex overflow-y-auto">
-                <StaggerContainer className="flex items-stretch p-4 gap-3" staggerDelay={0.2}>
-                  {projects.slice(0, 3).map((project) => (
+                <StaggerContainer className="flex items-stretch p-4 gap-3" staggerDelay={0.2} performanceMode lazy>
+                  {displayProjects.map((project: Project) => (
                     <StaggerItem key={project.id} className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60 sm:min-w-0 hover:transform hover:scale-105 transition-all duration-300 cursor-pointer">
                       <AdvancedProjectCard 
                         project={project} 
@@ -136,14 +143,14 @@ function HomePageContent() {
               <ProjectDetailDialog project={selectedProject} onClose={() => setSelectedProject(null)} />
             )}
 
-            <ScrollReveal delay={0.2}>
+            <ScrollReveal delay={0.2} performanceMode lazy>
               <h2 className="text-[#121416] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
                 技能
               </h2>
             </ScrollReveal>
-            <ScrollReveal delay={0.4}>
-              <StaggerContainer className="flex gap-3 p-3 flex-wrap pr-4" staggerDelay={0.1}>
-                {personalInfo.skills.map((skill) => (
+            <ScrollReveal delay={0.4} performanceMode lazy>
+              <StaggerContainer className="flex gap-3 p-3 flex-wrap pr-4" staggerDelay={0.1} performanceMode lazy>
+                {personalInfo.skills.map((skill: string) => (
                   <StaggerItem key={skill}>
                     <Badge
                       className="bg-[#f1f2f4] text-[#121416] hover:bg-gray-200 hover:scale-105 transition-all duration-300 cursor-pointer"
@@ -159,7 +166,7 @@ function HomePageContent() {
               经验
             </h2>
             <div className="grid grid-cols-1 gap-x-2 px-2 sm:px-4">
-              {resume.workExperience.map((workExp) => (
+              {resume.workExperience.map((workExp: any) => (
                 <React.Fragment key={workExp.id}>
                   <div className="flex flex-col items-center gap-1 pt-3">
                     {/* 图标已移除 */}
@@ -178,7 +185,7 @@ function HomePageContent() {
               教育
             </h2>
             <div className="grid grid-cols-1 gap-x-2 px-2 sm:px-4">
-              {resume.education.map((edu) => (
+              {resume.education.map((edu: any) => (
                 <React.Fragment key={edu.id}>
                   <div className="flex flex-col items-center gap-1 pt-3">
                     {/* 图标已移除 */}

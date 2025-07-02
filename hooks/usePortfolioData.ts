@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import { PortfolioData, defaultPortfolioData } from "@/types/portfolio"
 import { portfolioStorage } from "@/lib/storage"
 import { useEditMode } from "@/contexts/EditModeContext"
+import useSWR from 'swr'
 
 export function usePortfolioData() {
   const [data, setData] = useState<PortfolioData>(defaultPortfolioData)
@@ -212,5 +213,19 @@ export function usePortfolioData() {
     clearData,
     exportData,
     importData,
+  }
+}
+
+export function useHomePortfolioData() {
+  const fetcher = (url: string) => fetch(url).then(res => res.json())
+  const { data, error, isLoading } = useSWR(
+    '/api/portfolio?fields=personalInfo,projects,resume&projectLimit=3',
+    fetcher,
+    { revalidateOnFocus: false, dedupingInterval: 60000 }
+  )
+  return {
+    data: data || defaultPortfolioData,
+    loading: isLoading,
+    error
   }
 } 

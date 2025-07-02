@@ -23,14 +23,25 @@ export function LoginDialog({ open, onClose }: LoginDialogProps) {
     e.preventDefault()
     setLoading(true)
     setError("")
-    const ok = login(password)
-    setLoading(false)
-    if (ok) {
-      setPassword("")
-      setError("")
-      onClose()
-    } else {
-      setError("密码错误，请重试")
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      })
+      const data = await res.json()
+      setLoading(false)
+      if (data.success) {
+        login(password) // 只做本地状态切换
+        setPassword("")
+        setError("")
+        onClose()
+      } else {
+        setError(data.error || "密码错误")
+      }
+    } catch (err) {
+      setLoading(false)
+      setError("网络错误，请稍后重试")
     }
   }
 

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Project } from '@/types/portfolio';
 import { Badge } from './ui/badge';
+import Image from 'next/image';
 
 interface ProjectDetailViewProps {
   project: Project;
@@ -14,7 +15,7 @@ const ProjectDetailView: React.FC<ProjectDetailViewProps> = ({ project }) => {
       <div className="md:w-1/2 w-full flex flex-col items-center justify-center p-4">
         {project.coverImage && (
           <div className="w-full flex justify-center items-center mb-4">
-            <img src={project.coverImage} alt="项目封面" className="rounded-lg max-h-96 object-contain" />
+            <Image src={project.coverImage} alt="项目封面" className="rounded-lg max-h-96 object-contain" width={600} height={400} style={{objectFit:'contain'}} priority />
           </div>
         )}
       </div>
@@ -54,7 +55,7 @@ const ProjectDetailView: React.FC<ProjectDetailViewProps> = ({ project }) => {
             <div className="flex flex-wrap gap-3">
               {project.team.map((member, idx) => (
                 <div key={idx} className="flex items-center gap-2 bg-gray-100 rounded px-2 py-1">
-                  {member.avatar && <img src={member.avatar} alt={member.name} className="w-6 h-6 rounded-full" />}
+                  {member.avatar && <Image src={member.avatar} alt={member.name} className="w-6 h-6 rounded-full" width={24} height={24} style={{objectFit:'cover'}} />}
                   <span className="font-medium text-gray-800 text-sm">{member.name}</span>
                   <span className="text-xs text-gray-500">{member.role}</span>
                 </div>

@@ -34,10 +34,25 @@ async function writeDataFile(data: PortfolioData): Promise<void> {
 }
 
 // GET - 获取作品集数据
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url)
+    const fields = searchParams.get('fields')?.split(',').map(f => f.trim()).filter(Boolean)
+    const projectLimit = parseInt(searchParams.get('projectLimit') || '', 10)
     const data = await readDataFile()
-    return NextResponse.json(data)
+    let result: any = {}
+    if (fields && fields.length > 0) {
+      for (const field of fields) {
+        if (field === 'projects' && !isNaN(projectLimit)) {
+          result.projects = data.projects.slice(0, projectLimit)
+        } else {
+          result[field] = data[field as keyof typeof data]
+        }
+      }
+    } else {
+      result = { ...data }
+    }
+    return NextResponse.json(result)
   } catch (error) {
     console.error('获取数据失败:', error)
     return NextResponse.json(defaultPortfolioData)

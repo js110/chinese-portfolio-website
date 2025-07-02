@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { Project } from '@/types/portfolio';
 import ProjectDetailDialog from './ProjectDetailDialog';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export type ViewMode = 'grid' | 'list';
 
@@ -58,11 +59,14 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
           {/* 媒体区域 */}
           <div className="lg:w-1/3">
             {project.coverImage ? (
-              <img
+              <Image
                 src={project.coverImage}
                 alt={project.title}
                 className="w-full h-full object-cover aspect-video rounded-lg cursor-pointer"
+                width={400}
+                height={225}
                 onClick={onShowDetail}
+                loading="lazy"
               />
             ) : (
               <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
@@ -136,11 +140,14 @@ const AdvancedProjectCard: React.FC<AdvancedProjectCardProps> = ({
       {/* 媒体区域 */}
       <div className="relative">
         {project.coverImage ? (
-          <img
+          <Image
             src={project.coverImage}
             alt={project.title}
             className="w-full h-full object-cover aspect-video rounded-lg cursor-pointer"
+            width={400}
+            height={225}
             onClick={onShowDetail}
+            loading="lazy"
           />
         ) : (
           <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
