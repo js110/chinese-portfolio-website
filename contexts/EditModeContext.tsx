@@ -1,62 +1,85 @@
-"use client"
+﻿"use client"
 
-import React, { createContext, useContext, useState, ReactNode } from "react"
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState, ReactNode } from "react"
 
 interface EditModeContextType {
   isEditMode: boolean
   toggleEditMode: () => void
   setEditMode: (mode: boolean) => void
-  subscribe: (cb: (isEdit: boolean) => void) => void
+  subscribe: (cb: (isEdit: boolean) => void) => () => void
   isLoggedIn: boolean
-  login: (password: string) => boolean
+  login: () => void
   logout: () => void
 }
 
 const EditModeContext = createContext<EditModeContextType | undefined>(undefined)
-
-let subscribers: ((isEdit: boolean) => void)[] = []
 const LOCAL_KEY = "portfolio_admin_logged_in"
-const ADMIN_PASSWORD = "admin123" // 可自定义
 
 export function EditModeProvider({ children }: { children: ReactNode }) {
   const [isEditMode, setIsEditMode] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    typeof window !== "undefined" && localStorage.getItem(LOCAL_KEY) === "1"
-  )
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const subscribersRef = useRef(new Set<(isEdit: boolean) => void>())
 
-  const toggleEditMode = () => {
+  useEffect(() => {
+    const checkSession = async () => {
+      const hadLocalLogin = typeof window !== "undefined" && localStorage.getItem(LOCAL_KEY) === "1"
+      if (!hadLocalLogin) return
+
+      try {
+        const res = await fetch("/api/login", { method: "GET", cache: "no-store" })
+        const data = await res.json()
+        if (data?.authenticated) {
+          setIsLoggedIn(true)
+        } else {
+          localStorage.removeItem(LOCAL_KEY)
+        }
+      } catch {
+        localStorage.removeItem(LOCAL_KEY)
+      }
+    }
+
+    checkSession()
+  }, [])
+
+  const notifySubscribers = useCallback((mode: boolean) => {
+    subscribersRef.current.forEach((cb) => cb(mode))
+  }, [])
+
+  const toggleEditMode = useCallback(() => {
     if (!isLoggedIn) return
-    setIsEditMode(prev => {
+
+    setIsEditMode((prev) => {
       const next = !prev
-      subscribers.forEach(cb => cb(next))
+      notifySubscribers(next)
       return next
     })
-  }
+  }, [isLoggedIn, notifySubscribers])
 
-  const setEditMode = (mode: boolean) => {
-    if (!isLoggedIn) return
-    setIsEditMode(mode)
-    subscribers.forEach(cb => cb(mode))
-  }
+  const setEditMode = useCallback(
+    (mode: boolean) => {
+      if (!isLoggedIn) return
+      setIsEditMode(mode)
+      notifySubscribers(mode)
+    },
+    [isLoggedIn, notifySubscribers],
+  )
 
-  const subscribe = (cb: (isEdit: boolean) => void) => {
-    subscribers.push(cb)
-  }
+  const subscribe = useCallback((cb: (isEdit: boolean) => void) => {
+    subscribersRef.current.add(cb)
+    return () => subscribersRef.current.delete(cb)
+  }, [])
 
-  const login = (password: string) => {
-    if (password === ADMIN_PASSWORD) {
-      setIsLoggedIn(true)
-      localStorage.setItem(LOCAL_KEY, "1")
-      return true
-    }
-    return false
-  }
+  const login = useCallback(() => {
+    setIsLoggedIn(true)
+    localStorage.setItem(LOCAL_KEY, "1")
+  }, [])
 
-  const logout = () => {
+  const logout = useCallback(() => {
+    void fetch("/api/login", { method: "DELETE" })
     setIsLoggedIn(false)
     setIsEditMode(false)
     localStorage.removeItem(LOCAL_KEY)
-  }
+  }, [])
 
   return (
     <EditModeContext.Provider value={{ isEditMode, toggleEditMode, setEditMode, subscribe, isLoggedIn, login, logout }}>
@@ -71,4 +94,5 @@ export function useEditMode() {
     throw new Error("useEditMode must be used within an EditModeProvider")
   }
   return context
-} 
+}
+

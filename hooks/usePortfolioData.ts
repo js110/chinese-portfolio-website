@@ -32,9 +32,10 @@ export function usePortfolioData() {
     loadData()
 
     // 订阅编辑模式切换事件，切换时强制 reload 最新数据
-    subscribe(() => {
+    const unsubscribe = subscribe(() => {
       loadData()
     })
+    return unsubscribe
   }, [subscribe])
 
   // 保存数据

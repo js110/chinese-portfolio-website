@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import { notFound } from 'next/navigation';
 import { usePortfolioData } from '@/hooks/usePortfolioData';
 import ProjectDetailView from '@/components/ProjectDetailView';
 import { Navbar } from '@/components/Navbar';
@@ -15,7 +14,15 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ params }) => {
   const project = data.projects.find(p => p.id === params.id);
 
   if (!project) {
-    notFound();
+    return (
+      <div className="relative flex min-h-screen flex-col bg-[#f7f8fa] group/design-root overflow-x-hidden" style={{ fontFamily: 'Manrope, \"Noto Sans\", sans-serif' }}>
+        <Navbar />
+        <div className="layout-container flex h-full grow flex-col items-center justify-center px-6 py-12">
+          <h1 className="text-2xl font-semibold text-[#121416]">项目不存在</h1>
+          <p className="mt-2 text-sm text-[#6a7681]">请返回项目列表重新选择。</p>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { promises as fs } from 'fs'
 import path from 'path'
 
-const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'portfolio.json')
+const DATA_FILE_PATH = process.env.PORTFOLIO_DATA_PATH || path.join(process.cwd(), 'data', 'portfolio.json')
 
 // GET - 获取最后更新时间
 export async function GET() {

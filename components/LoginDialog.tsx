@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
 import { motion } from "framer-motion"
@@ -23,25 +23,26 @@ export function LoginDialog({ open, onClose }: LoginDialogProps) {
     e.preventDefault()
     setLoading(true)
     setError("")
+
     try {
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ password }),
       })
       const data = await res.json()
-      setLoading(false)
+
       if (data.success) {
-        login(password) // 只做本地状态切换
+        login()
         setPassword("")
-        setError("")
         onClose()
       } else {
         setError(data.error || "密码错误")
       }
-    } catch (err) {
-      setLoading(false)
+    } catch {
       setError("网络错误，请稍后重试")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -58,7 +59,7 @@ export function LoginDialog({ open, onClose }: LoginDialogProps) {
         animate={{ scale: 1 }}
         exit={{ scale: 0.95 }}
         className="bg-white rounded-lg shadow-xl w-full max-w-xs p-6 flex flex-col gap-4"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold text-center mb-2">管理员登录</h2>
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
@@ -66,7 +67,7 @@ export function LoginDialog({ open, onClose }: LoginDialogProps) {
             type="password"
             placeholder="请输入密码"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             autoFocus
             disabled={loading}
           />
@@ -78,4 +79,5 @@ export function LoginDialog({ open, onClose }: LoginDialogProps) {
       </motion.div>
     </motion.div>
   )
-} 
+}
+
