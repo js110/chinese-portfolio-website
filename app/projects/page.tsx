@@ -12,7 +12,7 @@ import { useEditMode } from "@/contexts/EditModeContext"
 import { usePortfolioData } from "@/hooks/usePortfolioData"
 import { Project } from "@/types/portfolio"
 import { EditModeProvider } from "@/contexts/EditModeContext"
-import { Navbar } from "@/components/Navbar"
+import Navbar from "@/components/Navbar"
 import { Plus } from "lucide-react"
 import ProjectDetailDialog from "@/components/ProjectDetailDialog"
 

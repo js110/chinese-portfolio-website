@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a"/>
+      <stop offset="100%" style="stop-color:#111"/>
+    </linearGradient>
+    <filter id="glow1">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg1)"/>
+  <rect x="50" y="80" width="200" height="280" rx="8" fill="none" stroke="#00ff88" stroke-width="2" filter="url(#glow1)"/>
+  <text x="150" y="140" text-anchor="middle" fill="#00ff88" font-family="monospace" font-size="14" opacity="0.8">document.pdf</text>
+  <line x1="80" y1="170" x2="220" y2="170" stroke="#333" stroke-width="1"/>
+  <text x="80" y="200" fill="#888" font-family="monospace" font-size="12">Paper Title...</text>
+  <text x="80" y="220" fill="#888" font-family="monospace" font-size="12">Abstract: This paper</text>
+  <text x="80" y="240" fill="#888" font-family="monospace" font-size="12">proposes a novel</text>
+  <text x="80" y="260" fill="#888" font-family="monospace" font-size="12">method for...</text>
+  <path d="M280 200 L370 200 L370 180 L400 210 L370 240 L370 220 L280 220 Z" fill="#00ff88" opacity="0.3"/>
+  <path d="M280 200 L370 200 L370 180 L400 210 L370 240 L370 220 L280 220 Z" fill="none" stroke="#00ff88" stroke-width="1.5"/>
+  <rect x="440" y="80" width="200" height="280" rx="8" fill="none" stroke="#00ffff" stroke-width="2" filter="url(#glow1)"/>
+  <text x="540" y="140" text-anchor="middle" fill="#00ffff" font-family="monospace" font-size="14" opacity="0.8">translated.pdf</text>
+  <line x1="470" y1="170" x2="610" y2="170" stroke="#333" stroke-width="1"/>
+  <text x="470" y="200" fill="#888" font-family="monospace" font-size="12">Paper Title...</text>
+  <text x="470" y="220" fill="#888" font-family="monospace" font-size="12">This paper proposes</text>
+  <text x="470" y="240" fill="#888" font-family="monospace" font-size="12">a novel method for</text>
+  <text x="470" y="260" fill="#888" font-family="monospace" font-size="12">solving complex...</text>
+  <text x="400" y="410" text-anchor="middle" fill="#00ff88" font-family="monospace" font-size="24" font-weight="bold" filter="url(#glow1)">PDF Translate</text>
+</svg>

@@ -1,31 +1,39 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-
-const inter = Inter({ subsets: ["latin"] })
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "蒋胜的个人网站",
-  description: "经验丰富的软件工程师，专注于全栈开发，热衷于创造创新和高效的解决方案。",
-  generator: 'v0.dev'
-}
+  title: "蒋胜 | Developer Portfolio",
+  description: "Full-stack developer, AI enthusiast, and open-source contributor. Building the future with code.",
+  keywords: ["developer", "hacker", "portfolio", "AI", "machine learning", "open source"],
+};
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="zh-CN">
+    <html lang="en" className="dark">
       <head>
-        <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin="" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Fira+Code:wght@300..700&display=swap"
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?display=swap&family=Manrope:wght@400;500;700;800&family=Noto+Sans:wght@400;500;700;900"
         />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className="min-h-screen bg-[#0a0a0a] text-white font-mono">
+        {/* 矩阵雨背景 */}
+        <div className="matrix-bg" />
+        
+        {/* 扫描线效果 */}
+        <div className="scanlines" />
+        
+        {/* 主内容 */}
+        <main className="relative z-10">
+          {children}
+        </main>
+      </body>
     </html>
-  )
+  );
 }

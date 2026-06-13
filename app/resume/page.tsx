@@ -7,7 +7,7 @@ import { StaggerContainer, StaggerItem } from "@/components/animations/stagger-c
 import { EditModeProvider } from "@/contexts/EditModeContext"
 import { useEditMode } from "@/contexts/EditModeContext"
 import { usePortfolioData } from "@/hooks/usePortfolioData"
-import { Navbar } from "@/components/Navbar"
+import Navbar from "@/components/Navbar"
 import { Button } from "@/components/ui/button"
 import { ResumeEditor } from "@/components/ResumeEditor"
 import { ResumeOverview } from "@/components/resume/ResumeOverview"

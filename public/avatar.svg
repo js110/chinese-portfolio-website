@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#111"/>
+      <stop offset="100%" stop-color="#050505"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowStrong">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="circle">
+      <circle cx="200" cy="200" r="180"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="200" cy="200" r="195" fill="#0a0a0a" stroke="#00ff88" stroke-width="3" filter="url(#glowStrong)"/>
+  <circle cx="200" cy="200" r="190" fill="url(#bg)"/>
+
+  <!-- Matrix rain background -->
+  <g clip-path="url(#circle)" opacity="0.15">
+    <text x="40" y="30" fill="#00ff88" font-family="monospace" font-size="11">01001</text>
+    <text x="80" y="60" fill="#00ff88" font-family="monospace" font-size="10">10110</text>
+    <text x="120" y="90" fill="#00ff88" font-family="monospace" font-size="11">01101</text>
+    <text x="160" y="50" fill="#00ff88" font-family="monospace" font-size="10">11010</text>
+    <text x="200" y="80" fill="#00ff88" font-family="monospace" font-size="11">00110</text>
+    <text x="240" y="40" fill="#00ff88" font-family="monospace" font-size="10">10011</text>
+    <text x="280" y="70" fill="#00ff88" font-family="monospace" font-size="11">01011</text>
+    <text x="320" y="55" fill="#00ff88" font-family="monospace" font-size="10">11001</text>
+    <text x="60" y="120" fill="#00ff88" font-family="monospace" font-size="10">10101</text>
+    <text x="300" y="110" fill="#00ff88" font-family="monospace" font-size="11">01110</text>
+    <text x="100" y="350" fill="#00ff88" font-family="monospace" font-size="10">11011</text>
+    <text x="250" y="340" fill="#00ff88" font-family="monospace" font-size="11">00101</text>
+    <text x="310" y="320" fill="#00ff88" font-family="monospace" font-size="10">10100</text>
+    <text x="50" y="330" fill="#00ff88" font-family="monospace" font-size="11">01100</text>
+  </g>
+
+  <!-- Hoodie silhouette -->
+  <g filter="url(#glow)">
+    <!-- Hood outline -->
+    <path d="M120 180 Q120 100 200 80 Q280 100 280 180 L280 260 Q280 290 260 310 L140 310 Q120 290 120 260 Z" fill="#0d0d0d" stroke="#00ff88" stroke-width="1.5" opacity="0.9"/>
+
+    <!-- Hood inner shadow -->
+    <path d="M135 185 Q135 115 200 95 Q265 115 265 185 L265 250 Q265 275 250 295 L150 295 Q135 275 135 250 Z" fill="#080808"/>
+
+    <!-- Face area glow -->
+    <ellipse cx="200" cy="190" rx="55" ry="65" fill="#050505" stroke="#00ff88" stroke-width="0.5" opacity="0.5"/>
+
+    <!-- Eyes - glowing green -->
+    <ellipse cx="178" cy="185" rx="14" ry="8" fill="#00ff88" opacity="0.9" filter="url(#glow)"/>
+    <ellipse cx="222" cy="185" rx="14" ry="8" fill="#00ff88" opacity="0.9" filter="url(#glow)"/>
+
+    <!-- Eye pupils -->
+    <ellipse cx="178" cy="185" rx="5" ry="5" fill="#0a0a0a"/>
+    <ellipse cx="222" cy="185" rx="5" ry="5" fill="#0a0a0a"/>
+
+    <!-- Eye shine -->
+    <circle cx="182" cy="182" r="2" fill="#fff" opacity="0.7"/>
+    <circle cx="226" cy="182" r="2" fill="#fff" opacity="0.7"/>
+
+    <!-- Nose hint -->
+    <line x1="200" y1="195" x2="200" y2="210" stroke="#00ff88" stroke-width="1" opacity="0.3"/>
+
+    <!-- Mouth area -->
+    <path d="M185 225 Q200 230 215 225" fill="none" stroke="#00ff88" stroke-width="1" opacity="0.4"/>
+  </g>
+
+  <!-- Circuit lines on hoodie -->
+  <g stroke="#00ff88" stroke-width="1" opacity="0.4" filter="url(#glow)">
+    <line x1="160" y1="310" x2="160" y2="350"/>
+    <line x1="160" y1="350" x2="200" y2="360"/>
+    <line x1="200" y1="360" x2="240" y2="350"/>
+    <line x1="240" y1="350" x2="240" y2="310"/>
+    <circle cx="160" cy="350" r="3" fill="#00ff88"/>
+    <circle cx="200" cy="360" r="3" fill="#00ff88"/>
+    <circle cx="240" cy="350" r="3" fill="#00ff88"/>
+  </g>
+
+  <!-- Terminal cursor blinking effect hint -->
+  <text x="200" y="390" text-anchor="middle" fill="#00ff88" font-family="monospace" font-size="10" opacity="0.5">sheng@dev:~$_</text>
+</svg>

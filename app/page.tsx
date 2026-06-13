@@ -1,239 +1,99 @@
-"use client"
+import Navbar from "@/components/Navbar";
+import HeroSection from "@/components/HeroSection";
+import ProjectsSection from "@/components/ProjectsSection";
+import AboutSection from "@/components/AboutSection";
 
-import React, { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { FadeIn } from "@/components/animations/fade-in"
-import { ScrollReveal } from "@/components/animations/scroll-reveal"
-import { StaggerContainer, StaggerItem } from "@/components/animations/stagger-container"
-import { FloatingElement } from "@/components/animations/floating-element"
-import { EditModeToggle } from "@/components/EditModeToggle"
-import { useEditMode } from "@/contexts/EditModeContext"
-import { useHomePortfolioData } from "@/hooks/usePortfolioData"
-import { EditModeProvider } from "@/contexts/EditModeContext"
-import { LoginDialog } from "@/components/LoginDialog"
-import { Navbar } from "@/components/Navbar"
-import { useRouter } from "next/navigation"
-import { Project } from "@/types/portfolio"
-import dynamic from 'next/dynamic'
-import Image from 'next/image'
-
-const AdvancedProjectCard = dynamic(() => import('@/components/AdvancedProjectCard'))
-const PersonalInfoEditor = dynamic(() => import('@/components/PersonalInfoEditor').then(mod => mod.PersonalInfoEditor))
-const ProjectDetailDialog = dynamic(() => import('@/components/ProjectDetailDialog'))
-
-function HomePageContent() {
-  const { data, loading } = useHomePortfolioData()
-  const [showPersonalInfoEditor, setShowPersonalInfoEditor] = useState(false)
-  const { isEditMode } = useEditMode()
-  const router = useRouter()
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-      </div>
-    )
-  }
-
-  const { personalInfo, projects, resume } = data
-
-  // 获取特色项目
-  const featuredProjects = projects.filter((project: Project) => project.featured).slice(0, 3)
-  const otherProjects = projects.filter((project: Project) => !project.featured).slice(0, 3 - featuredProjects.length)
-  const displayProjects: Project[] = [...featuredProjects, ...otherProjects].slice(0, 3)
-
-  const handleProjectClick = () => {
-    router.push('/projects')
-  }
-
+export default function Home() {
   return (
-    <div
-      className="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
-      style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}
-    >
+    <div className="min-h-screen bg-[#0a0a0a]">
       <Navbar />
+      <main>
+        <HeroSection />
+        <ProjectsSection />
+        <AboutSection />
 
-      <div className="layout-container flex h-full grow flex-col">
-        <div className="px-2 sm:px-4 lg:px-40 flex flex-1 justify-center py-3 sm:py-5">
-          <div className="layout-content-container flex flex-col w-full max-w-full sm:max-w-[1200px] flex-1">
-            <FadeIn delay={0.2}>
-              <div className="flex p-4">
-                <div className="flex w-full flex-col gap-4 items-center">
-                  <div className="flex gap-4 flex-col items-center">
-                    <FloatingElement delay={0.4}>
-                      <div className="relative">
-                        {personalInfo.avatar ? (
-                          <Image
-                            src={personalInfo.avatar}
-                            alt={personalInfo.name || '头像'}
-                            width={128}
-                            height={128}
-                            className="rounded-full min-h-32 w-32 shadow-lg object-cover"
-                            priority
-                          />
-                        ) : (
-                          <div className="bg-gray-300 rounded-full min-h-32 w-32 shadow-lg" />
-                        )}
-                        {isEditMode && (
-                          <Button
-                            className="absolute -bottom-2 -right-2 w-8 h-8 p-0 rounded-full bg-blue-600 hover:bg-blue-700"
-                            onClick={() => setShowPersonalInfoEditor(true)}
-                          >
-                            <span className="text-xs sm:text-sm">编辑</span>
-                          </Button>
-                        )}
-                      </div>
-                    </FloatingElement>
-                    <FadeIn delay={0.6} direction="up">
-                      <div className="flex flex-col items-center justify-center">
-                        <p className="text-[#121416] text-[22px] font-bold leading-tight tracking-[-0.015em] text-center">
-                          {personalInfo.name}
-                        </p>
-                        <p className="text-[#6a7681] text-sm sm:text-base font-normal leading-normal mt-1">
-                          {personalInfo.title}
-                        </p>
-                        <p className="text-[#6a7681] text-base font-normal leading-normal text-center max-w-2xl mt-2">
-                          {personalInfo.description}
-                        </p>
-                      </div>
-                    </FadeIn>
-                  </div>
-                </div>
+      </main>
+
+      {/* 页脚 */}
+      <footer className="py-8 px-4 border-t border-[#222]">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Logo 和简介 */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="text-[#00ff88] text-xl">{"{"}</span>
+                <span className="font-bold text-white">EL</span>
+                <span className="text-[#00ffff]">:</span>
+                <span className="text-[#888888]">dev</span>
+                <span className="text-[#00ff88] text-xl">{"}"}</span>
               </div>
-            </FadeIn>
-
-            <FadeIn delay={0.8} performanceMode lazy>
-              <div className="flex justify-center">
-                <div className="flex flex-1 gap-3 flex-wrap px-4 py-3 max-w-[480px] justify-center">
-                  <Button 
-                    onClick={handleProjectClick}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    查看所有项目
-                  </Button>
-                </div>
-              </div>
-            </FadeIn>
-
-            <ScrollReveal delay={0.2}>
-              <h2 className="text-[#121416] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
-                精选项目
-              </h2>
-            </ScrollReveal>
-            
-            <ScrollReveal delay={0.4} performanceMode lazy>
-              <div className="flex overflow-y-auto">
-                <StaggerContainer className="flex items-stretch p-4 gap-3" staggerDelay={0.2} performanceMode lazy>
-                  {displayProjects.map((project: Project) => (
-                    <StaggerItem key={project.id} className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60 sm:min-w-0 hover:transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                      <AdvancedProjectCard 
-                        project={project} 
-                        viewMode="grid" 
-                        onShowDetail={() => setSelectedProject(project)}
-                      />
-                    </StaggerItem>
-                  ))}
-                </StaggerContainer>
-              </div>
-            </ScrollReveal>
-
-            {selectedProject && (
-              <ProjectDetailDialog project={selectedProject} onClose={() => setSelectedProject(null)} />
-            )}
-
-            <ScrollReveal delay={0.2} performanceMode lazy>
-              <h2 className="text-[#121416] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
-                技能
-              </h2>
-            </ScrollReveal>
-            <ScrollReveal delay={0.4} performanceMode lazy>
-              <StaggerContainer className="flex gap-3 p-3 flex-wrap pr-4" staggerDelay={0.1} performanceMode lazy>
-                {personalInfo.skills.map((skill: string) => (
-                  <StaggerItem key={skill}>
-                    <Badge
-                      className="bg-[#f1f2f4] text-[#121416] hover:bg-gray-200 hover:scale-105 transition-all duration-300 cursor-pointer"
-                    >
-                      {skill}
-                    </Badge>
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
-            </ScrollReveal>
-
-            <h2 className="text-[#121416] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
-              经验
-            </h2>
-            <div className="grid grid-cols-1 gap-x-2 px-2 sm:px-4">
-              {resume.workExperience.map((workExp: any) => (
-                <React.Fragment key={workExp.id}>
-                  <div className="flex flex-col items-center gap-1 pt-3">
-                    {/* 图标已移除 */}
-                  </div>
-                  <div className="flex flex-1 flex-col py-3">
-                    <p className="text-[#121416] text-sm sm:text-base font-medium leading-normal">{workExp.company}</p>
-                    <p className="text-[#6a7681] text-xs sm:text-base font-normal leading-normal">
-                      {workExp.startDate} - {workExp.endDate}
-                    </p>
-                  </div>
-                </React.Fragment>
-              ))}
+              <p className="text-sm text-[#888888]">
+                Building the future with code and AI.
+                <br />
+                Open source contributor & full-stack developer.
+              </p>
             </div>
 
-            <h2 className="text-[#121416] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
-              教育
-            </h2>
-            <div className="grid grid-cols-1 gap-x-2 px-2 sm:px-4">
-              {resume.education.map((edu: any) => (
-                <React.Fragment key={edu.id}>
-                  <div className="flex flex-col items-center gap-1 pt-3">
-                    {/* 图标已移除 */}
-                  </div>
-                  <div className="flex flex-1 flex-col py-3">
-                    <p className="text-[#121416] text-sm sm:text-base font-medium leading-normal">{edu.institution}</p>
-                    <p className="text-[#6a7681] text-xs sm:text-base font-normal leading-normal">
-                      {edu.degree} - {edu.field}
-                    </p>
-                    <p className="text-[#6a7681] text-xs sm:text-base font-normal leading-normal">
-                      {edu.startDate} - {edu.endDate}
-                    </p>
-                  </div>
-                </React.Fragment>
-              ))}
+            {/* 快速链接 */}
+            <div>
+              <h3 className="text-sm font-semibold text-white mb-4">
+                <span className="text-[#00ff88]">$</span> Quick Links
+              </h3>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="text-sm text-[#888888] hover:text-[#00ff88] transition-colors">
+                    <span className="text-[#00ff88]">▸</span> Home
+                  </a>
+                </li>
+                <li>
+                  <a href="#projects" className="text-sm text-[#888888] hover:text-[#00ff88] transition-colors">
+                    <span className="text-[#00ff88]">▸</span> Projects
+                  </a>
+                </li>
+                <li>
+                  <a href="#about" className="text-sm text-[#888888] hover:text-[#00ff88] transition-colors">
+                    <span className="text-[#00ff88]">▸</span> About
+                  </a>
+                </li>
+              </ul>
             </div>
+
+            {/* 社交链接 */}
+            <div>
+              <h3 className="text-sm font-semibold text-white mb-4">
+                <span className="text-[#00ff88]">$</span> Connect
+              </h3>
+              <div className="flex gap-4">
+                <a
+                  href="https://github.com/js110"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-[#111] border border-[#222] rounded-lg hover:border-[#00ff88] transition-all hover:shadow-[0_0_10px_#00ff88]"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* 底部版权 */}
+          <div className="mt-8 pt-8 border-t border-[#222] text-center">
+            <p className="text-sm text-[#888888]">
+              <span className="text-[#00ff88]">©</span> 2024 蒋胜. All rights reserved.
+              <br />
+              <span className="text-[#888888]">Built with</span>{" "}
+              <span className="text-[#00ffff]">Next.js</span>,{" "}
+              <span className="text-[#00ffff]">TypeScript</span>, and{" "}
+              <span className="text-[#00ffff]">Tailwind CSS</span>
+            </p>
+            <p className="text-xs text-[#444] mt-2">
+              <span className="text-[#00ff88]">$</span> echo "Keep hacking, keep learning"
+            </p>
           </div>
         </div>
-
-        <footer className="flex justify-center w-full">
-          <div className="flex w-full max-w-full sm:max-w-[960px] flex-1 flex-col">
-            <footer className="flex flex-col gap-4 sm:gap-6 px-2 sm:px-5 py-6 sm:py-10 text-center">
-              <div className="flex flex-wrap justify-center gap-4">
-                {/* 图标已移除 */}
-              </div>
-              <p className="text-[#6a7681] text-sm sm:text-base font-normal leading-normal">@{new Date().getFullYear()} {personalInfo.name}。保留所有权利。</p>
-            </footer>
-          </div>
-        </footer>
-      </div>
-
-      {showPersonalInfoEditor && (
-        <PersonalInfoEditor
-          personalInfo={data.personalInfo}
-          onClose={() => setShowPersonalInfoEditor(false)}
-        />
-      )}
-
-      <LoginDialog open={false} onClose={() => {}} />
+      </footer>
     </div>
-  )
-}
-
-export default function HomePage() {
-  return (
-    <EditModeProvider>
-      <HomePageContent />
-      <EditModeToggle />
-    </EditModeProvider>
-  )
+  );
 }

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a"/>
+      <stop offset="100%" style="stop-color:#1a0a1a"/>
+    </linearGradient>
+    <filter id="glow3">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg3)"/>
+  <circle cx="300" cy="180" r="60" fill="none" stroke="#bf00ff" stroke-width="2" filter="url(#glow3)"/>
+  <circle cx="300" cy="180" r="45" fill="none" stroke="#bf00ff" stroke-width="1" opacity="0.5"/>
+  <circle cx="290" cy="170" r="4" fill="#bf00ff"/>
+  <circle cx="310" cy="170" r="4" fill="#bf00ff"/>
+  <path d="M290 195 Q300 205 310 195" fill="none" stroke="#bf00ff" stroke-width="2"/>
+  <circle cx="500" cy="180" r="60" fill="none" stroke="#00ff88" stroke-width="2" filter="url(#glow3)"/>
+  <circle cx="500" cy="180" r="45" fill="none" stroke="#00ff88" stroke-width="1" opacity="0.5"/>
+  <circle cx="490" cy="170" r="4" fill="#00ff88"/>
+  <circle cx="510" cy="170" r="4" fill="#00ff88"/>
+  <path d="M490 195 Q500 205 510 195" fill="none" stroke="#00ff88" stroke-width="2"/>
+  <path d="M360 180 C380 140 420 140 440 180" fill="none" stroke="#888" stroke-width="1.5" stroke-dasharray="5,5"/>
+  <path d="M360 180 C380 220 420 220 440 180" fill="none" stroke="#888" stroke-width="1.5" stroke-dasharray="5,5"/>
+  <circle cx="395" cy="160" r="3" fill="#bf00ff" opacity="0.6"/>
+  <circle cx="405" cy="200" r="2" fill="#00ff88" opacity="0.6"/>
+  <text x="300" y="280" text-anchor="middle" fill="#bf00ff" font-family="monospace" font-size="12" opacity="0.6">Voice Clone</text>
+  <text x="500" y="280" text-anchor="middle" fill="#00ff88" font-family="monospace" font-size="12" opacity="0.6">AI Companion</text>
+  <path d="M360 260 L440 260" stroke="#555" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="400" y="410" text-anchor="middle" fill="#bf00ff" font-family="monospace" font-size="24" font-weight="bold" filter="url(#glow3)">AI Companionship</text>
+</svg>
